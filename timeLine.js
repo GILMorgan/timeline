@@ -48,6 +48,10 @@ export default class timeLine {
     }
 
     addDateSet(dateset, label) {
+        if (typeof(dateset) === 'undefined') {
+            return this;
+        }
+
         var newDateSet = new graphDateSet(dateset, label);
         newDateSet.setPosition(this.dateSets.length + 1);
         this.dateSets.push(newDateSet);
