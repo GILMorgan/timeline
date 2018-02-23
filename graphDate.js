@@ -1,56 +1,54 @@
-/**
- * Date range manipulation class
- */
-export default class GraphDate {
-    constructor(date) {
-        this._now = new Date();
-        this._date = date;
+export default class graphDate {
+    constructor(rawDateRange) {
+        this.rawDateRange = rawDateRange;
     }
 
-    /**
-     * convert a date in dd/mm format into a the number of month since 01/00
-     *
-     * @param {string} date
-     *
-     * @return {int}
-     */
-    _convertToMonth(date) {
-        var splitedDate = date.split('/');
+    _convert(date, first) {
+        var _date = new Date();
 
-        return parseInt(splitedDate[0]) + (splitedDate[1] * 12);
-    }
-
-    /**
-     * Split a date with the given callback
-     *
-     * @param {callback} transformMethod
-     *
-     * @return {hash}
-     */
-    _splitDate(transformMethod) {
-        var dateToParse = this._date.split(' - ');
-
-        if ((typeof(dateToParse[1]) === 'undefined') ||  (dateToParse[1] == '')) {
-            dateToParse[1] = (this._now.getMonth() + 2.5) + "/" + this._now.getFullYear();
+        if (typeof(_date) === "undefined") {
+            return _date.getTime() / 1000;
         }
 
-        return {
-            min: transformMethod(dateToParse[0]),
-            max: transformMethod(dateToParse[1])
+        var day = date.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
+        if(day) {
+            _date.setDate(month[1]);
+            _date.setMonth(month[2]-1);
+            _date.setYear(month[3]);
+
+            return _date.getTime() / 1000;
+        }
+
+        var month = date.match(/(\d{1,2})\/(\d{4})/);
+
+        if (month) {
+            _date.setDate(1);
+            _date.setMonth(month[1]-1);
+
+            if (!first) {
+                _date.setMonth(month[1]);
+                _date.setDate(0);
+            }
+
+            _date.setYear(month[2]);
+
+            return _date.getTime() / 1000;
         }
     }
 
-    /**
-     * Return an array of month
-     *
-     * @return {array}
-     */
-    toMonth() {
-        var dateInMonth = this._splitDate(this._convertToMonth);
+
+
+    _splitRange() {
+        this.startRange = this.rawDateRange.split('-')[0];
+        this.endRange = this.rawDateRange.split('-')[1]
+    }
+
+    convert() {
+        this._splitRange();
 
         return [
-            dateInMonth.min,
-            dateInMonth.max
+            this._convert(this.startRange, true),
+            this._convert(this.endRange, false)
         ];
     }
 }

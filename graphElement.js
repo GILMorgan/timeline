@@ -1,7 +1,5 @@
-/**
- * Base class of any element of the graph
- * Adding some dry to the current classes
- */
+import graphScale from './graphScale'
+
 export default class graphElement {
     constructor(domElement) {
         this.ctx = domElement.getContext("2d");
@@ -20,5 +18,15 @@ export default class graphElement {
 
     setFont(font) {
         this.ctx.font = font;
+    }
+
+    getRealHeight(time) {
+        var height = (time - graphScale.bounds.min) / (3600 * 24) * graphScale.size.heightPerDay;
+
+        return height;
+    }
+
+    getBounds() {
+        return graphScale.bounds;
     }
 }

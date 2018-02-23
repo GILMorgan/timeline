@@ -1,50 +1,12 @@
 import graphDateSet from './graphDateSet';
-import graphGraduation from './graphGraduation';
+import graphScale from './graphScale';
+import graphBar from './graphBar';
 
 export default class timeLine {
     constructor() {
         this.dateSets = [];
         this.canvas = document.createElement('canvas');
-        this.bounds = {
-            min: null,
-            max: null
-        };
-    }
-
-    _getBounds() {
-        var arrBounds = {
-            "min": [],
-            "max": []
-        };
-
-        this.dateSets.forEach(function(dateset) {
-            var bounds = dateset.getBounds();
-            arrBounds.min.push(bounds.min);
-            arrBounds.max.push(bounds.max);
-        });
-
-        this.bounds.min = Math.min(...arrBounds.min);
-        this.bounds.max = Math.min(...arrBounds.max);
-    }
-
-    _setCanvasSize() {
-        this.canvas.setAttribute("width", "800px");
-        this.canvas.setAttribute(
-            "height",
-            (this.bounds.max - this.bounds.min) * graphGraduation.getHeight() + graphGraduation.getMargin()
-        );
-    }
-
-    _setGraduation() {
-        var min = this.bounds.min - 1;
-        graphGraduation.setEndLine(this.bounds.max);
-
-        while (min < this.bounds.max) {
-            var graduation = new graphGraduation(this.canvas, min);
-            graduation.display();
-
-            min++;
-        }
+        this.scale = new graphScale(this.canvas);
     }
 
     addDateSet(dateset, label) {
@@ -60,14 +22,15 @@ export default class timeLine {
     }
 
     render() {
-        this._getBounds();
-        this._setCanvasSize();
-        this._setGraduation();
-
         var _this = this;
+        this.scale
+            .getDateSets(this.dateSets)
+            .setGraduation();
 
         this.dateSets.forEach(function(dateSet) {
-            dateSet.addGraphBars(_this.canvas, _this.bounds);
+            dateSet.dateset.forEach(function(event) {
+                var bar = new graphBar(_this.canvas, event);
+            });
         });
 
         return this.canvas;
