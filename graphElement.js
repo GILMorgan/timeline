@@ -21,9 +21,13 @@ export default class graphElement {
     }
 
     getRealHeight(time) {
-        var height = (time - graphScale.bounds.min) / (3600 * 24) * graphScale.size.heightPerDay;
+        var height = Math.floor(graphScale.bounds.max - time) / (3600 * 24) * graphScale.size.heightPerDay;
 
         return height;
+    }
+
+    getRealPosition(position) {
+        return 110 - ((position - 1) * 20);
     }
 
     getBounds() {

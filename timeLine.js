@@ -1,6 +1,7 @@
 import graphDateSet from './graphDateSet';
 import graphScale from './graphScale';
 import graphBar from './graphBar';
+import graphLabel from './graphLabel';
 
 export default class timeLine {
     constructor() {
@@ -29,7 +30,11 @@ export default class timeLine {
 
         this.dateSets.forEach(function(dateSet) {
             dateSet.dateset.forEach(function(event) {
-                var bar = new graphBar(_this.canvas, event);
+                var bar = new graphBar(_this.canvas, event, dateSet.position);
+                var label = new graphLabel(_this.canvas, event, dateSet.position);
+
+                bar.display();
+                label.display();
             });
         });
 

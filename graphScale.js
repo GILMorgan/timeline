@@ -54,6 +54,13 @@ export default class graphScale {
         _bounds = value;
     }
 
+    _addBoundsMargin() {
+        var margin = (graphScale.bounds.max - graphScale.bounds.min) * 0.1;
+
+        graphScale.bounds.max += margin;
+        graphScale.bounds.min -= margin;
+    }
+
     _setHeight() {
         graphScale.size.height = (graphScale.bounds.max - graphScale.bounds.min) / (3600 * 24) * graphScale.size.heightPerDay;
 
@@ -74,6 +81,7 @@ export default class graphScale {
 
     setGraduation() {
         this._setBounds();
+        this._addBoundsMargin();
         this._setHeight();
         this._setWidth();
 
