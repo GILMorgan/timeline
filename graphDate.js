@@ -6,10 +6,6 @@ export default class graphDate {
     _convert(date, first) {
         var _date = new Date();
 
-        if (typeof(_date) === "undefined") {
-            return _date.getTime() / 1000;
-        }
-
         var day = date.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
         if(day) {
             _date.setDate(month[1]);
@@ -34,9 +30,9 @@ export default class graphDate {
 
             return _date.getTime() / 1000;
         }
+
+        return _date.getTime() / 1000;
     }
-
-
 
     _splitRange() {
         this.startRange = this.rawDateRange.split('-')[0];
