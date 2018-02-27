@@ -1,5 +1,7 @@
 import graphElement from './graphElement'
 import graphDate from './graphDate';
+import placeholder from './icons/placeholder.png';
+import entreprise from './icons/entreprise.png';
 
 export default class graphLabel extends graphElement {
     constructor(canvas, event, position) {
@@ -16,6 +18,19 @@ export default class graphLabel extends graphElement {
         this.middle = (convertDate[1] - convertDate[0]) / 2 + convertDate[0];
     }
 
+    _getIcon(image, height) {
+        var icon = new Image()
+        var _this = this;
+
+        icon.onload = function() {
+            _this.ctx.drawImage(this, 270, height - 24, 24, 24);
+        }
+
+        icon.src = image;
+    }
+
+
+
     display() {
         this._getMiddle();
 
@@ -26,7 +41,10 @@ export default class graphLabel extends graphElement {
         this.ctx.lineTo(270, realHeight);
         this.ctx.stroke();
 
-        //this.event.lieu;
-        //this.event.entreprise;
+        this._getIcon(placeholder, realHeight);
+        this._getIcon(entreprise, realHeight - 30);
+
+        this.ctx.strokeText(this.event.lieu, 300, realHeight -7);
+        this.ctx.strokeText(this.event.entreprise, 300, realHeight - 38);
     }
 }
